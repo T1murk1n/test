@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2d half</title>
+    <style>
+        *, *::after, *::before{
+           box-sizing: border-box;
+           margin: 0;
+           padding: 0;
+        }
+        html, body{
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        div[class$="__container"] {
+            max-width: 1230px;
+            padding: 0 15px;
+            margin: 0 auto;
+        }
+        ul, ol{
+            list-style: none;
+        }
+        .btn-reset {
+            padding: 0;
+            border: none;
+            color: inherit;
+            background-color: transparent;
+            cursor: pointer;
+        }
+        ul[class$="__list"] {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+        ul[class$="__list-col"] {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        li[class$="__item-row"] {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        a[class$="__link"] {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            font-weight: 600;
+            text-decoration: none;
+            list-style-type: none;
+        }
+        header {
+            position: absolute;
+            width: 100%;
+            z-index: 100;
+            border-bottom: 1px solid #fff5;
+        }
+        header .header__list {
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            list-style: none;
+        }
+        header .header__list .header__item {
+            padding: 30px 40px;
+            color: #fff;
+        }
+        .header__item.active, .header__item:hover{
+            border-bottom: 2px solid #fff;
+        }
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            background-image: linear-gradient(to right, #2B2F3A, #0D0E12);
+            overflow: hidden;
+        }
+        .slider::before {
+            position: absolute;
+            width: 50%;
+            height: 100vh;
+            content: '';
+            top: 0;
+            left: 0;
+            background-color: #E88735;
+        }
+        .title {
+            position: absolute;
+            top: 10%;
+            right: 60%;
+            text-align: right;
+            color: #fff;
+            font-size: 150px;
+            line-height: .9em;
+            text-shadow: 3px 5px 0 #478860;
+            transform: rotate(-5deg);
+        }
+        .content {
+            color: #fff;
+            position: absolute;
+            top: 10%;
+            left: 60%;
+            text-align: justify;
+            width: 350px;
+        }
+        .content h1 {
+            color: #E88735;
+            font-size: xx-large;
+            text-transform: uppercase;
+        }
+        .content .des {
+            padding: 20px 0 0 0;
+        }
+        .content button {
+            margin-top: 30px;
+            padding: 10px 30px;
+            border-radius: 20px;
+            background-color: #E88735;
+            color: #fff;
+            border: none;
+            float: right;
+        }
+        .content .item {
+            display: none;
+        }
+        .content .item.active {
+            display: block;
+        }
+
+        @keyframes showContent {
+            from{
+                opacity: 0;
+                transform: translateY(100px);
+            }to{
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .content .item.item.active h1 {
+            opacity: 0;
+            animation: showContent .5s ease-in-out 1 forwards;
+        }
+        .content .item.item.active .des {
+            opacity: 0;
+            animation: showContent .5s .3s ease-in-out 1 forwards;
+        }
+        .content .item.item.active button {
+            opacity: 0;
+            animation: showContent .5s .6s ease-in-out 1 forwards;
+        }
+        .images {
+            position: absolute;
+            bottom: 0%;
+            left: 50%;
+            --rotate: 0deg;
+            transform: translate(-50%, 50%) rotate(var(--rotate));
+            width: 1300px;
+            height: 1300px;
+            border-radius: 50%;
+            transition: all .5s ease-in-out;
+            outline: 3px dashed #fff5;
+            outline-offset: -100px;
+        }
+        .images .item {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            rotate: calc(60deg * var(--i));
+        }
+        .images .item img {
+            height: 420px;
+        }
+        .prev, .next {
+            position: absolute;
+            border: none;
+            top: 50%;
+            left: 250px;
+            font-size: 100px;
+            font-family: cursive;
+            background-color: transparent;
+            color: #fff;
+            font-weight: bold;
+            opacity: .3;
+        }
+        .next {
+            left: unset;
+            right: 250px;
+        }
+        .prev:hover, .next:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <ul class="header__list">
+            <li class="header__item active"><a href="#" class="header__link">home</a></li>
+            <li class="header__item"><a href="#" class="header__link">contact</a></li>
+            <li class="header__item"><a href="#" class="header__link">info</a></li>
+            <li class="header__item"><a href="#" class="header__link">category</a></li>
+        </ul>
+    </header>
+    <div class="slider">
+        <div class="title">Slider</div>
+        <div class="content">
+
+            <div class="item active">
+                <h1>product name 1</h1>
+                <p class="des">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias suscipit, nulla voluptates explicabo eius illo consectetur ab similique officia laboriosam ullam, expedita accusamus commodi dolorum labore! Quam praesentium tempore eligendi atque in maxime aliquid dolores soluta, aut quibusdam ea natus consequatur veniam ipsum consectetur non quasi! Consequuntur iste veniam doloribus.
+                </p>
+                <button>See more</button>
+            </div>
+            <div class="item">
+                <h1>product name 2</h1>
+                <p class="des">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias suscipit, nulla voluptates explicabo eius illo consectetur ab similique officia laboriosam ullam, expedita accusamus commodi dolorum labore! Quam praesentium tempore eligendi atque in maxime aliquid dolores soluta, aut quibusdam ea natus consequatur veniam ipsum consectetur non quasi! Consequuntur iste veniam doloribus.
+                </p>
+                <button>See more</button>
+            </div>
+            <div class="item">
+                <h1>product name 3</h1>
+                <p class="des">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias suscipit, nulla voluptates explicabo eius illo consectetur ab similique officia laboriosam ullam, expedita accusamus commodi dolorum labore! Quam praesentium tempore eligendi atque in maxime aliquid dolores soluta, aut quibusdam ea natus consequatur veniam ipsum consectetur non quasi! Consequuntur iste veniam doloribus.
+                </p>
+                <button>See more</button>
+            </div>
+            <div class="item">
+                <h1>product name 4</h1>
+                <p class="des">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias suscipit, nulla voluptates explicabo eius illo consectetur ab similique officia laboriosam ullam, expedita accusamus commodi dolorum labore! Quam praesentium tempore eligendi atque in maxime aliquid dolores soluta, aut quibusdam ea natus consequatur veniam ipsum consectetur non quasi! Consequuntur iste veniam doloribus.
+                </p>
+                <button>See more</button>
+            </div>
+            <div class="item">
+                <h1>product name 5</h1>
+                <p class="des">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias suscipit, nulla voluptates explicabo eius illo consectetur ab similique officia laboriosam ullam, expedita accusamus commodi dolorum labore! Quam praesentium tempore eligendi atque in maxime aliquid dolores soluta, aut quibusdam ea natus consequatur veniam ipsum consectetur non quasi! Consequuntur iste veniam doloribus.
+                </p>
+                <button>See more</button>
+            </div>
+            <div class="item">
+                <h1>product name 6</h1>
+                <p class="des">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias suscipit, nulla voluptates explicabo eius illo consectetur ab similique officia laboriosam ullam, expedita accusamus commodi dolorum labore! Quam praesentium tempore eligendi atque in maxime aliquid dolores soluta, aut quibusdam ea natus consequatur veniam ipsum consectetur non quasi! Consequuntur iste veniam doloribus.
+                </p>
+                <button>See more</button>
+            </div>
+        </div>
+
+        <div class="images">
+            <div class="item" style="--i: 1">
+                <img src="./img/i1.png" alt="">
+            </div>
+            <div class="item" style="--i: 2">
+                <img src="./img/i2.png" alt="">
+            </div>
+            <div class="item" style="--i: 3">
+                <img src="./img/i3.png" alt="">
+            </div>
+            <div class="item" style="--i: 4">
+                <img src="./img/i4.png" alt="">
+            </div>
+            <div class="item" style="--i: 5">
+                <img src="./img/i5.png" alt="">
+            </div>
+            <div class="item" style="--i: 6">
+                <img src="./img/i6.png" alt="">
+            </div>
+        </div>
+
+        <button class="prev"><</button>
+        <button class="next">></button>
+    </div>
+
+    <script>
+        let prev = document.querySelector('.prev');
+        let next = document.querySelector('.next');
+        let image = document.querySelector('.images');
+        let items = document.querySelectorAll('.images .item');
+        let contents = document.querySelectorAll('.content .item');
+
+        let rotate = 0;
+        let active = 0;
+        let countItem = items.length;
+        let rotateAdd = 360 / countItem;
+
+        function show() {
+            image.style.setProperty('--rotate', rotate + 'deg');
+            contents.forEach((content, key) => {
+                if(key == active) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            })
+        }
+
+        function nextSlider() {
+            active = active + 1 > countItem - 1 ? 0 : active + 1;
+            rotate = rotate + rotateAdd;
+            show();
+        }
+        next.onclick = nextSlider;
+
+
+        function prevSlider() {
+            active = active - 1 < 0 ? countItem - 1 : active - 1;
+            rotate = rotate - rotateAdd;
+            show();
+        }
+        prev.onclick = prevSlider;
+
+        const autoNext = setInterval(nextSlider, 3000);
+    </script>
+</body>
+</html>
